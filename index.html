@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서부 AI 실습교육 - 실전 가이드</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="#part0">Part 0</a>
+        <a href="#part1">Part 1</a>
+        <a href="#part2">Part 2</a>
+        <a href="#part3">Part 3</a>
+        <a href="#part4">Part 4</a>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🎯 서부 AI 실습교육</h1>
+            <p>AI 업무자동화 대시보드 제작 실전 가이드</p>
+        </div>
+
+        <div id="part0" class="section">
+            <div class="section-inner">
+                <h2>PART 0: 준비하기</h2>
+                <div class="highlight-box">
+                    <strong>1. 실습 환경 준비</strong><br>
+                    - <a href="https://support.claude.com/ko/articles/10065433-claude-desktop-%EC%84%A4%EC%B9%98" target="_blank" class="accent-link">Claude Desktop에 접속하여 로그인 합니다. (설치 가이드 링크)</a>
+                </div>
+                <div class="highlight-box">
+                    <strong>2. 실습 데이터 다운로드</strong><br>
+                    - 제공된 엑셀 실습 데이터 파일을 다운로드하여 바탕화면 등 찾기 쉬운 곳에 저장해 둡니다.<br>
+                    <br>
+                    💾 <a href="./삼성전자 Fake 데이터.xlsx" download class="accent-link" style="text-decoration: underline;">삼성전자 Fake 데이터.xlsx 다운로드</a>
+                </div>
+            </div>
+        </div>
+
+        <div id="part1" class="section">
+            <div class="section-inner">
+                <h2>STEP 1: 기본 대시보드 뼈대 만들기</h2>
+                <div class="highlight-box">
+                    <strong>📖 이 단계에서 하는 일:</strong><br>
+                    AI에게 엑셀 데이터를 올려주고, "이 데이터를 분석해서 한눈에 볼 수 있는 차트 대시보드를 만들어줘"라고 지시합니다.
+                </div>
+                <div class="card">
+                    <h4>💡 기본 프롬프트</h4>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                        <pre>첨부한 엑셀 데이터를 기반으로 데이터를 한눈에 분석할 수 있는 웹 대시보드를 만들어줘.
+
+[요구사항]
+1. HTML, CSS, JavaScript가 모두 포함된 단일 HTML 파일로 작성해.
+2. 데이터를 읽기 위해 SheetJS (https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js)를 사용해.
+3. 차트를 그리기 위해 Chart.js (https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js)를 사용해.
+4. CSS 색상은 반드시 hex나 rgb 형식만 사용해 (oklch, hsl 금지).
+
+[기능]
+- 화면 상단에 엑셀 파일을 업로드할 수 있는 버튼 영역.
+- 파일을 올리면 데이터를 분석해서 주요 지표(총 매출액 등)를 상단 카드로 보여주고, 하단에 의미 있는 차트 2~3개를 적절히 배치해줘.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="part2" class="section">
+            <div class="section-inner">
+                <h2>STEP 2: 필터 + AI 비교 분석</h2>
+                <div class="highlight-box">
+                    <strong>📖 이 단계에서 추가되는 것:</strong><br>
+                    조건별로 데이터를 걸러보고, "AI 분석" 버튼으로 해당 조건의 인사이트를 받습니다.
+                </div>
+                
+                <h3>🔍 프롬프트 해설</h3>
+                <ul>
+                    <li><strong>필터:</strong> 카테고리, 거주지역 등 드롭다운 조건으로 원하는 데이터만 봅니다.</li>
+                    <li><strong>⭐ AI 분석 버튼:</strong> 필터 적용 후 버튼을 클릭하면 Gemini API가 "이 조건에서 주목할 점"을 분석합니다.</li>
+                </ul>
+
+                <div class="grid-2">
+                    <div class="card">
+                        <h4>간단 버전</h4>
+                        <div class="code-container">
+                            <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                            <pre>필터 기능을 추가해줘.
+
+성별, 연령대, 채널, 카테고리, 거주지역, 프리미엄 6개 필터.
+다중 선택 가능, 필터 변경 시 차트+지표 즉시 업데이트.
+날짜 범위 필터도 추가.
+
+"AI 분석" 버튼을 추가해줘 — 현재 필터 조건에서의 데이터를 Gemini API로 분석하여 인사이트 1~2줄을 표시.</pre>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4>실전 버전</h4>
+                        <div class="code-container">
+                            <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                            <pre>이전에 만든 대시보드에 필터 기능을 추가해줘.
+
+[필터 — 6개]
+성별, 연령대, 채널, 카테고리, 거주지역, 프리미엄 여부
+- 각 필터: 드롭다운, 다중 선택 (체크박스)
+- "전체 선택" / "전체 해제" 버튼
+- 필터 변경 → 모든 차트 + 지표 즉시 업데이트
+
+[날짜 범위 필터]
+- 영업일자의 최소~최대 자동 계산
+- 시작일/종료일 input[type=date]
+
+[⭐ AI 비교 분석 버튼]
+필터 영역 옆에 "AI 분석" 버튼 추가.
+클릭 시:
+- 현재 필터 조건 요약 (예: "채널=온라인, 성별=여성")
+- 필터링된 데이터의 핵심 수치를 Gemini API에 전송
+- AI가 "이 조건에서 주목할 점" 1~2문장 분석
+- 인사이트 영역에 결과 표시 + "AI 분석 중..." 로딩
+
+[성능]
+- 필터 이벤트에 debounce 150ms
+- 차트 인스턴스 재사용</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="part3" class="section">
+            <div class="section-inner">
+                <h2>STEP 3: 탭 구조 + AI 항목별 해석</h2>
+                <div class="highlight-box">
+                    <strong>📖 이 단계에서 추가되는 것:</strong><br>
+                    화면을 탭으로 나누어 항목별 심화 분석. 각 탭에 AI 코멘트가 자동 표시됩니다.
+                </div>
+                
+                <h3>🔍 프롬프트 해설</h3>
+                <ul>
+                    <li><strong>탭 구조:</strong> 한 화면에 모든 차트를 넣으면 복잡합니다. 탭으로 분리하여 주제별로 봅니다.</li>
+                    <li><strong>데이터 상세:</strong> 원본 데이터를 테이블로 보여줍니다. 검색+정렬+페이지네이션 필수.</li>
+                    <li><strong>⭐ AI 코멘트:</strong> 탭 전환 시 해당 분석 데이터를 Gemini API로 보내 코멘트를 표시.</li>
+                </ul>
+
+                <div class="card">
+                    <h4>실전 버전</h4>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                        <pre>현재 대시보드를 탭 구조로 변경해줘.
+
+[탭 1: Overview]
+- 핵심 지표 카드 5개 + 일별 매출 추이 라인차트
+- 기존 AI 인사이트 영역 유지
+
+[탭 2: 채널분석]
+- 채널별 매출 도넛차트 (50%) + 매장별 Top20 막대차트 (50%)
+- ⭐ AI 코멘트: "채널별 매출 데이터를 분석해줘" → 1~2문장 표시
+
+[탭 3: 고객분석]
+- 성별 매출 도넛 + 연령대 막대 + 거주지역 막대 (3열 그리드)
+- ⭐ AI 코멘트: "고객 세그먼트별 특징 분석"
+
+[탭 4: 상품분석]
+- 카테고리별 도넛 + 프리미엄 등급별 차트
+- ⭐ AI 코멘트: "상품별 성과 분석"
+
+[탭 5: 데이터상세]
+- 필터 적용된 거래내역 테이블
+- 페이지네이션 (50/100행), 컬럼별 정렬, 검색
+- "총 31,729건 중 50건 표시" 건수 표시
+
+[탭 6: 보고서] — 비워둬 (STEP 4에서 추가)
+
+[AI 코멘트 동작]
+- 각 탭 전환 시 "AI 분석 중..." 로딩 → Gemini API 호출
+- 해당 탭의 데이터 요약을 전송 → AI 코멘트 1~2문장 수신 → 표시
+
+[성능] 탭 전환 시 해당 탭의 차트만 렌더링. 차트 인스턴스 재사용.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="part4" class="section">
+            <div class="section-inner">
+                <h2>STEP 4: AI 종합 보고서</h2>
+                <div class="highlight-box">
+                    <strong>📖 이 단계에서 추가되는 것:</strong><br>
+                    AI가 전체 데이터를 종합해서 보고서를 작성합니다. 인쇄하면 바로 보고용으로 사용 가능합니다.
+                </div>
+                
+                <h3>🔍 프롬프트 해설</h3>
+                <ul>
+                    <li><strong>보고서 생성 버튼:</strong> 클릭하면 전체 데이터 요약을 Gemini API에 전송. AI가 보고서를 작성.</li>
+                    <li><strong>보고서 구조:</strong> 핵심지표→분석→트렌드→제안 순서. 경영진이 바로 읽을 수 있는 형식.</li>
+                    <li><strong>표 렌더링:</strong> AI 응답의 마크다운 표(|---|)를 HTML &lt;table&gt;로 변환 필수.</li>
+                </ul>
+
+                <div class="card">
+                    <h4>실전 버전</h4>
+                    <div class="code-container">
+                        <button class="copy-btn" onclick="copyCode(this)">복사</button>
+                        <pre>보고서 탭을 완성해줘.
+
+[⭐ AI 보고서 생성 버튼]
+클릭 시 전체 데이터(현재 필터 적용)의 요약을 Gemini API에 전송.
+AI가 아래 구조의 보고서를 작성하여 렌더링:
+
+[보고서 레이아웃 — A4 비율]
+상단: "데이터 분석 보고서" / 분석 기간 (자동) / 작성일
+
+섹션 1: 핵심 지표 요약 — HTML &lt;table&gt;로 4칸 그리드 렌더링
+섹션 2: 채널별 매출 분석 — 상위 3개 + 금액 + 비중% + AI 인사이트, HTML &lt;table&gt; 사용
+섹션 3: 일별 매출 트렌드 — 최고/최저일 + 일평균 + AI 해석
+섹션 4: 카테고리별 성과 Top 5 — HTML &lt;table&gt;로 표 렌더링 (순위/항목/매출/비중)
+섹션 5: 고객 세그먼트 분석 (연령대/성별/지역 상위)
+섹션 6: AI 개선 제안 2~3개 (데이터 기반)
+섹션 7: 종합 소견 (AI가 2~3문장 작성)
+
+[⚠️ 마크다운 → HTML 변환 필수]
+Gemini API 응답에 마크다운 표(| --- |)가 포함됨.
+순수 JS 사용 시: 마크다운 표를 HTML &lt;table&gt;로 변환하는 함수 직접 구현.
+표에 CSS 적용: border-collapse, 셀 padding, 헤더 배경색 등으로 가독성 확보.
+마크다운 원문(파이프 문자)을 그대로 화면에 표시하면 절대 안됨.
+
+[출력 버튼]
+1. "📋 텍스트 복사" — execCommand fallback 필수 작성.
+2. "🖨 인쇄/PDF" — 새 탭에서 열기 방식으로 구현.
+보고서 상단에 인쇄하기 버튼 포함.
+
+[AI 호출 시]
+- "보고서 생성 중..." 로딩 애니메이션 추가</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section" style="border-bottom: none;">
+            <div class="section-inner">
+                <h2>자주 묻는 질문 & 마무리</h2>
+                
+                <div class="faq-item">
+                    <strong>✓ 생성된 앱은 어떻게 사용하나요?</strong>
+                    AI Studio에서 프롬프트를 입력하면 오른쪽 Preview 화면에 바로 앱이 나타납니다. 여기서 엑셀을 업로드하고 바로 사용하면 됩니다. 별도로 저장하고 싶다면 전체 코드를 복사하여 .html로 저장한 뒤 브라우저에서 열어 사용할 수 있습니다.
+                </div>
+                
+                <div class="faq-item">
+                    <strong>✓ 엑셀 데이터는 안전한가요?</strong>
+                    차트와 필터는 브라우저 내에서만 처리됩니다. AI 인사이트/보고서 기능을 사용할 때만 데이터 요약이 Gemini API로 전송되며, Google의 데이터 약관이 적용됩니다.
+                </div>
+                
+                <div class="faq-item">
+                    <strong>✓ 차트가 안 보이거나 깨지는 경우?</strong>
+                    AI Studio 대화창에서 "차트가 안 보여. 수정해줘"라고 바로 요청하세요. 에러 내용이 보이면 복사해서 함께 보내면 더 정확하게 수정해 줍니다.
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
